@@ -1,0 +1,22 @@
+*{
+    margin: 0 ;
+    padding: 0;
+}
+
+.jumbotron{
+	background-image: url(../gmbr/jumbotron-bg.jpg);
+	background-size: cover;
+	height: 640px;
+    position: relative;
+}
+.jumbotron .container{
+    margin-top: 100px;
+    position: relative;
+    z-index: 1;
+    background-color: rgb(193, 222, 255);
+    width: 400px;
+    border-radius: 10px;
+}
+.daftar{
+    padding-top: 10px;
+}

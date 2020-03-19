@@ -1,0 +1,52 @@
+*{
+   margin: 0 ;
+   padding: 0;
+  
+   
+}
+body{
+   background-color: dimgrey;
+   text-align: center;
+}
+.navbar-nav{
+   margin-right: 40px;
+}
+
+
+/*android*/
+@media (max-width: 992px){
+
+
+
+
+
+}
+
+/*dekstop*/
+@media (min-width: 992px){
+   .container1{
+      border: 5px solid rgb(241, 241, 241);
+      width: 900px;
+      margin:100px auto ;
+      overflow: auto;
+      background-color: white;
+      
+   }
+  
+   
+   .gmbrinti{
+      height: 400px;
+      width: 900px;
+      border: 2px solid white;
+   }
+   
+   
+   
+   .thumb{
+      width: 30%;
+      height: 300px;
+      float: center;
+      border: 5px solid white;
+      box-sizing: border-box;
+   }
+}
