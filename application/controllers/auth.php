@@ -9,15 +9,42 @@ class Auth extends CI_Controller
         $this->load->library('form_validation');
     }
 
+
+    // login
     public function login()
     {
-        $data['title'] = 'Login';
-        $this->load->view('templates/auth_header', $data);
-        $this->load->view('auth/login');
-        $this->load->view('templates/auth_footer');
+        // rules login
+        $this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
+        $this->form_validation->set_rules('password', 'Password', 'trim|required');
+
+        // validation login
+        if ($this->form_validation->run() == false) {
+
+            $data['title'] = 'Login';
+            $this->load->view('templates/auth_header', $data);
+            $this->load->view('auth/login');
+            $this->load->view('templates/auth_footer');
+        } else {
+            $this->_login();
+        }
     }
+
+    private function _login()
+    {
+        $email = $this->input->post('email');
+        $password = $this->input->post('pasword');
+
+    // query db
+    $user = $this->db->get_where('user',['email'] => $email);
+    }
+
+
+    // registrasi
+
+
     public function registration()
     {
+        // rules registrasi
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
             'is_unique' => 'this email alredy regitered!!'
@@ -29,6 +56,8 @@ class Auth extends CI_Controller
         ]);
         $this->form_validation->set_rules('password2', 'Password', 'required|trim|matches[password1]');
 
+
+        //validation registration
         if ($this->form_validation->run() == false) {
             $data['title'] = 'register';
             $this->load->view('templates/auth_header', $data);
