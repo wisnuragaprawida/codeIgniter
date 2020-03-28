@@ -32,10 +32,37 @@ class Auth extends CI_Controller
     private function _login()
     {
         $email = $this->input->post('email');
-        $password = $this->input->post('pasword');
+        $password = $this->input->post('password');
 
-    // query db
-    $user = $this->db->get_where('user',['email'] => $email);
+        // query db
+        $user = $this->db->get_where('user', ['email' => $email])->row_array();
+        // jika usernya ada
+        if ($user) {
+            // jika user aktiv
+            if ($user['is_active'] == 1) {
+                // cek pasword
+                if (password_verify($password, $user['password'])) {
+                    $data = [
+                        'email' => $user['email'],
+                        'role_id' => $user['role_id']
+                    ];
+                    $this->session->set_userdata($data);
+                    redirect('home');
+                } else {
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+                    password does not match!!</div>');
+                    redirect('auth/login');
+                }
+            } else {
+                $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+            Email not activated!</div>');
+                redirect('auth/login');
+            }
+        } else {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">
+            Email not registered!</div>');
+            redirect('auth/login');
+        }
     }
 
 
