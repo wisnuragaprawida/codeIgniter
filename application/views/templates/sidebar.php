@@ -12,33 +12,52 @@
     <!-- Divider -->
     <hr class="sidebar-divider ">
 
-    <div class="sidebar-heading">
-        administrator
-    </div>
+    <!-- query menu join 2 tabel -->
 
+    <?php
+    $roleid = $this->session->userdata('role_id');
+    $querymenu = "SELECT `user_menu`.`id` , `menu`
+                    FROM `user_menu` JOIN `user_access`
+                    ON `user_menu`. `id` = `user_access`. `menu_id`
+                    WHERE `user_access`. `role_id` = $roleid 
+                    ORDER BY `user_access`. `menu_id` ASC
+                    ";
+    $menu = $this->db->query($querymenu)->result_array();
 
-    <!-- Nav Item - Dashboard -->
-    <li class="nav-item">
-        <a class="nav-link" href="index.html">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
-    </li>
+    ?>
+    <!-- looping menu -->
+    <?php foreach ($menu as $m) : ?>
+        <div class="sidebar-heading">
+            <?= $m['menu'] ?>
+        </div>
+
+        <!-- query submenu buat menu -->
+        <?php
+        $menuid = $m['id'];
+        $querysubmenu = "SELECT * FROM `user_sub_menu`
+        WHERE `menu_id` = $menuid
+        AND `is_active` = 1
+         ";
+        $submenu = $this->db->query($querysubmenu)->result_array();
+        ?>
+
+        <?php foreach ($submenu as $sm) : ?>
+
+            <!-- sub menu  -->
+            <li class="nav-item">
+                <a class="nav-link" href="<?= base_url($sm['url']) ?>">
+                    <i class="<?= $sm['icon'] ?>"></i>
+                    <span><?= $sm['title'] ?></span></a>
+            </li>
+
+        <?php endforeach; ?>
+        <hr class="sidebar-divider">
+
+    <?php endforeach; ?>
+
 
     <!-- Divider -->
-    <hr class="sidebar-divider">
 
-    <!-- Heading -->
-    <div class="sidebar-heading">
-        user
-    </div>
-    <!-- Nav Item - Charts -->
-    <li class="nav-item">
-        <a class="nav-link" href="charts.html">
-            <i class="fas fa-fw fa-user"></i>
-            <span>my profile</span></a>
-    </li>
-    <!-- Divider -->
-    <hr class="sidebar-divider">
     <li class="nav-item">
         <a class="nav-link" href="<?= base_url('auth/logout/'); ?>" data-toggle="modal" data-target="#logoutModal">
             <i class="fas fa-fw fa-sign-out-alt"></i>
