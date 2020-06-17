@@ -13,6 +13,9 @@ class Auth extends CI_Controller
     // login
     public function login()
     {
+        if ($this->session->userdata('email')) {
+            redirect('user');
+        }
         // rules login
         $this->form_validation->set_rules('email', 'Email', 'trim|valid_email|required');
         $this->form_validation->set_rules('password', 'Password', 'trim|required');
@@ -31,6 +34,7 @@ class Auth extends CI_Controller
 
     private function _login()
     {
+
         $email = $this->input->post('email');
         $password = $this->input->post('password');
 
@@ -48,7 +52,7 @@ class Auth extends CI_Controller
                     ];
                     $this->session->set_userdata($data);
                     if ($user['role_id'] == 2) {
-                        redirect('user');
+                        redirect('user/home');
                     } else {
                         redirect('admin');
                     }
@@ -75,6 +79,9 @@ class Auth extends CI_Controller
 
     public function registration()
     {
+        if ($this->session->userdata('email')) {
+            redirect('user');
+        }
         // rules registrasi
         $this->form_validation->set_rules('name', 'Name', 'required|trim');
         $this->form_validation->set_rules('email', 'Email', 'required|trim|valid_email|is_unique[user.email]', [
@@ -117,5 +124,10 @@ class Auth extends CI_Controller
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">
            you have been logout!!</div>');
         redirect('auth/login');
+    }
+
+    public function blocked()
+    {
+        echo " access denied";
     }
 }
